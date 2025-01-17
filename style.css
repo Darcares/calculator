@@ -15,9 +15,11 @@ body {
     flex-direction: column;
 }
 
-#screen {
+.screen {
     flex: 1;
-    margin: 1%;;
+    font-size: 300%;
+    margin: 1%;
+    border: 1px solid black;
 }
 
 .row {
@@ -26,6 +28,7 @@ body {
 }
 
 button {
+    font-size: 270%;
     flex: 1;
     margin: 1%
 }
