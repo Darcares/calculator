@@ -41,3 +41,7 @@ function operate(operator, a, b) {
 
     return result;
 }
+
+const buttons = document.querySelectorAll(`button`);
+const screen = document.querySelector(`.screen`);
+buttons.forEach(button => button.addEventListener(`click`, (event) => screen.innerText = event.target.innerText));
