@@ -46,6 +46,21 @@ function updateScreen(click) {
     (screen.textContent.includes(`.`) && click.target.textContent.includes(`.`)) ? screen.textContent: screen.textContent += click.target.textContent;
 }
 
+function assignOperands(click) {
+    if(firstOperand === null) {
+        firstOperand = +screen.textContent;
+        screen.textContent = `0`;
+    }
+    else {
+        secondOperand = +screen.textContent;
+    }
+}
+
+let firstOperand = null;
+let secondOperand = null;
 const digits = document.querySelectorAll(`.digit`);
+const operators = document.querySelectorAll(`.operator`);
 const screen = document.querySelector(`.screen`);
+screen.textContent = `0`;
 digits.forEach(digit => digit.addEventListener(`click`, click => updateScreen(click)));
+operators.forEach(operator => operator.addEventListener(`click`, click => assignOperands(click)));
