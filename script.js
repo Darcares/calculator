@@ -1,44 +1,44 @@
-function add(a, b) {
-    return a + b;
+function add(firstOperand, secondOperand) {
+    return firstOperand + secondOperand;
 }
 
-function subtract(a, b) {
-    return a - b;
+function subtract(firstOperand, secondOperand) {
+    return firstOperand - secondOperand;
 }
 
-function multiply(a, b) {
-    return a * b;
+function multiply(firstOperand, secondOperand) {
+    return firstOperand * secondOperand;
 }
 
-function divide(a, b) {
-    return a / b;
+function divide(firstOperand, secondOperand) {
+    return firstOperand / secondOperand;
 }
 
-function operate(operator, a, b) {
+function operate(operator, firstOperand, secondOperand) {
     let result = null;
 
     switch(operator) {
 
-        case 0:
-            result = add(a, b);
+        case "sum":
+            result = add(firstOperand, secondOperand);
             break;
         
-        case 1:
-            result = subtract(a, b);
+        case "subtraction":
+            result = subtract(firstOperand, secondOperand);
             break;
         
-        case 2:
-            result = multiply(a, b);
+        case "multiplication":
+            result = multiply(firstOperand, secondOperand);
             break;
 
-        case 3:
-            result = divide(a, b);
+        case "division":
+            result = divide(firstOperand, secondOperand);
             break;
         
         default:
             break;
     }
-
+    screen.textContent = result;
     return result;
 }
 
@@ -54,13 +54,21 @@ function assignOperands(click) {
     else {
         secondOperand = +screen.textContent;
     }
+
+    if(!(click.target.id === `equals`)) operator = click.target.id;
 }
 
 let firstOperand = null;
 let secondOperand = null;
+let operator = null;
 const digits = document.querySelectorAll(`.digit`);
 const operators = document.querySelectorAll(`.operator`);
+const equals = document.querySelector(`#equals`);
 const screen = document.querySelector(`.screen`);
 screen.textContent = `0`;
 digits.forEach(digit => digit.addEventListener(`click`, click => updateScreen(click)));
 operators.forEach(operator => operator.addEventListener(`click`, click => assignOperands(click)));
+equals.addEventListener(`click`, (click) => {
+    assignOperands(click);
+    operate(operator, firstOperand, secondOperand);
+});
