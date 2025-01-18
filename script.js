@@ -42,6 +42,10 @@ function operate(operator, a, b) {
     return result;
 }
 
-const buttons = document.querySelectorAll(`button`);
+function updateScreen(click) {
+    (screen.textContent.includes(`.`) && click.target.textContent.includes(`.`)) ? screen.textContent: screen.textContent += click.target.textContent;
+}
+
+const digits = document.querySelectorAll(`.digit`);
 const screen = document.querySelector(`.screen`);
-buttons.forEach(button => button.addEventListener(`click`, (event) => screen.innerText = event.target.innerText));
+digits.forEach(digit => digit.addEventListener(`click`, click => updateScreen(click)));
