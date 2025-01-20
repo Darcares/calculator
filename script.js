@@ -60,7 +60,7 @@ function assignOperands(event) {
     else {
         secondOperand = +screen.textContent;
     }
-    if(!(firstOperand === null && secondOperand === null && operator === null)) operate(operator, firstOperand, secondOperand);
+    if(!(firstOperand === null) && !(secondOperand === null) && !(operator === null)) operate(operator, firstOperand, secondOperand);
     if(!(event.target.id === `equals`)) operator = event.target.id;
 }
 
