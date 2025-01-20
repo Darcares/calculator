@@ -47,20 +47,20 @@ function updateScreen(event) {
         screen.textContent = ``;
         cleanScreen = false;  
     }   
+
     if(!(screen.textContent.includes(`.`) && event.target.textContent.includes(`.`))) screen.textContent += event.target.textContent;
     }
-    //if(!(screen.textContent.includes(`.`) && event.target.textContent.includes(`.`))) screen.textContent += event.target.textContent;
-    //if(!(firstOperand === null) && !(operator === null)) screen.textContent += event.target.textContent;
 
 function assignOperands(event) {
     if(firstOperand === null) {
         firstOperand = +screen.textContent;
         cleanScreen = true;
     }
+
     else {
         secondOperand = +screen.textContent;
     }
-
+    if(!(firstOperand === null && secondOperand === null && operator === null)) operate(operator, firstOperand, secondOperand);
     if(!(event.target.id === `equals`)) operator = event.target.id;
 }
 
