@@ -1,46 +1,28 @@
-function add(firstOperand, secondOperand) {
-    return firstOperand + secondOperand;
-}
-
-function subtract(firstOperand, secondOperand) {
-    return firstOperand - secondOperand;
-}
-
-function multiply(firstOperand, secondOperand) {
-    return firstOperand * secondOperand;
-}
-
-function divide(firstOperand, secondOperand) {
-    return firstOperand / secondOperand;
-}
-
 function operate(operator, firstOperand, secondOperand) {
     let result = null;
 
     switch(operator) {
 
-        case "sum":
-            result = add(firstOperand, secondOperand);
+        case 10:
+            result = firstOperand + secondOperand;
             break;
         
-        case "subtraction":
-            result = subtract(firstOperand, secondOperand);
+        case 20:
+            result = firstOperand - secondOperand;
             break;
         
-        case "multiplication":
-            result = multiply(firstOperand, secondOperand);
+        case 30:
+            result = firstOperand * secondOperand;
             break;
 
-        case "division":
-            result = divide(firstOperand, secondOperand);
+        case 40:
+            result = firstOperand / secondOperand;
             break;
         
         default:
             break;
     }
-    console.log(result);
     reInitialize(result);
-    //return result;
 }
 
 function updateScreen(event) {
@@ -67,7 +49,7 @@ function assignOperands(event) {
         operate(operator, firstOperand, secondOperand);
     }
 
-    operator = event.target.id;
+    operator = +event.target.id;
 }
 
 function reInitialize(result) {
