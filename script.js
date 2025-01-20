@@ -38,14 +38,16 @@ function operate(operator, firstOperand, secondOperand) {
         default:
             break;
     }
-    screen.textContent = result;
-    return result;
+    console.log(result);
+    reInitialize(result);
+    //return result;
 }
 
 function updateScreen(event) {
-    if(cleanScreen) {
+    if(isCleanScreenActive) {
         screen.textContent = ``;
-        cleanScreen = false;  
+        isCleanScreenActive = false;
+        canSecondOperatorBeAssigned = true;
     }   
 
     if(!(screen.textContent.includes(`.`) && event.target.textContent.includes(`.`))) screen.textContent += event.target.textContent;
@@ -54,28 +56,56 @@ function updateScreen(event) {
 function assignOperands(event) {
     if(firstOperand === null) {
         firstOperand = +screen.textContent;
-        cleanScreen = true;
+        isCleanScreenActive = true;
     }
 
-    else {
+    else if(canSecondOperatorBeAssigned){
         secondOperand = +screen.textContent;
     }
-    if(!(firstOperand === null) && !(secondOperand === null) && !(operator === null)) operate(operator, firstOperand, secondOperand);
-    if(!(event.target.id === `equals`)) operator = event.target.id;
+
+    if(!(firstOperand === null) && !(secondOperand === null) && !(operator === null)) {
+        operate(operator, firstOperand, secondOperand);
+    }
+
+    operator = event.target.id;
 }
 
-let firstOperand = null;
-let secondOperand = null;
-let operator = null;
-let cleanScreen = false;
+function reInitialize(result) {
+    screen.textContent = result;
+    firstOperand = result;
+    secondOperand = null;
+    operator = null;
+    isCleanScreenActive = true;
+    canSecondOperatorBeAssigned = false;
+}
+
+function initialize() {
+    firstOperand = null;
+    secondOperand = null;
+    operator = null;
+    isCleanScreenActive = false;
+    canSecondOperatorBeAssigned = false;
+    screen.textContent = `0`;
+}
+
 const digits = document.querySelectorAll(`.digit`);
 const operators = document.querySelectorAll(`.operator`);
 const equals = document.querySelector(`#equals`);
 const screen = document.querySelector(`.screen`);
+const clear = document.querySelector(`#clear`);
+let firstOperand = null;
+let secondOperand = null;
+let operator = null;
+let isCleanScreenActive = false;
+let canSecondOperatorBeAssigned = false;
 screen.textContent = `0`;
+
+clear.addEventListener(`click`, initialize);
 digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event)));
 operators.forEach(operator => operator.addEventListener(`click`, event => assignOperands(event)));
-equals.addEventListener(`click`, (event) => {
-    assignOperands(event);
+equals.addEventListener(`click`, () => {
+    if(canSecondOperatorBeAssigned) {
+        secondOperand = +screen.textContent;
+    }
     operate(operator, firstOperand, secondOperand);
 });
