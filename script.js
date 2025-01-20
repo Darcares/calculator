@@ -42,33 +42,40 @@ function operate(operator, firstOperand, secondOperand) {
     return result;
 }
 
-function updateScreen(click) {
-    (screen.textContent.includes(`.`) && click.target.textContent.includes(`.`)) ? screen.textContent: screen.textContent += click.target.textContent;
-}
+function updateScreen(event) {
+    if(cleanScreen) {
+        screen.textContent = ``;
+        cleanScreen = false;  
+    }   
+    if(!(screen.textContent.includes(`.`) && event.target.textContent.includes(`.`))) screen.textContent += event.target.textContent;
+    }
+    //if(!(screen.textContent.includes(`.`) && event.target.textContent.includes(`.`))) screen.textContent += event.target.textContent;
+    //if(!(firstOperand === null) && !(operator === null)) screen.textContent += event.target.textContent;
 
-function assignOperands(click) {
+function assignOperands(event) {
     if(firstOperand === null) {
         firstOperand = +screen.textContent;
-        screen.textContent = `0`;
+        cleanScreen = true;
     }
     else {
         secondOperand = +screen.textContent;
     }
 
-    if(!(click.target.id === `equals`)) operator = click.target.id;
+    if(!(event.target.id === `equals`)) operator = event.target.id;
 }
 
 let firstOperand = null;
 let secondOperand = null;
 let operator = null;
+let cleanScreen = false;
 const digits = document.querySelectorAll(`.digit`);
 const operators = document.querySelectorAll(`.operator`);
 const equals = document.querySelector(`#equals`);
 const screen = document.querySelector(`.screen`);
 screen.textContent = `0`;
-digits.forEach(digit => digit.addEventListener(`click`, click => updateScreen(click)));
-operators.forEach(operator => operator.addEventListener(`click`, click => assignOperands(click)));
-equals.addEventListener(`click`, (click) => {
-    assignOperands(click);
+digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event)));
+operators.forEach(operator => operator.addEventListener(`click`, event => assignOperands(event)));
+equals.addEventListener(`click`, (event) => {
+    assignOperands(event);
     operate(operator, firstOperand, secondOperand);
 });
