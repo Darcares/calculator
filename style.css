@@ -15,7 +15,7 @@ body {
     flex-direction: column;
 }
 
-.screen {
+#screen {
     flex: 1;
     font-size: 500%;
     margin: 1%;

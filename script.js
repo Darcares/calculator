@@ -1,93 +1,135 @@
-function operate(operator, firstOperand, secondOperand) {
-    let result = null;
+initializeCalculator();
 
-    switch(operator) {
+function add(firstOperand, secondOperand) {
+    const result = (firstOperand + secondOperand);
+    return result;
+}
+
+function subtract(firstOperand, secondOperand) {
+    const result = (firstOperand - secondOperand);
+    return result;
+}
+
+function multiply(firstOperand, secondOperand) {
+    const result = (firstOperand * secondOperand);
+    return result;
+}
+
+function divide(firstOperand, secondOperand) {
+    const result = (firstOperand / secondOperand);
+    return result;
+}
+
+function operate(event, screen, operation, permit) {
+
+    switch(operation.operator) {
 
         case 10:
-            result = firstOperand + secondOperand;
+            operation.result = add(operation.firstOperand, operation.secondOperand);
             break;
         
         case 20:
-            result = firstOperand - secondOperand;
+            operation.result = subtract(operation.firstOperand, operation.secondOperand);
             break;
         
         case 30:
-            result = firstOperand * secondOperand;
+            operation.result = multiply(operation.firstOperand, operation.secondOperand);
             break;
 
         case 40:
-            result = firstOperand / secondOperand;
+            operation.result = divide(operation.firstOperand, operation.secondOperand);
             break;
         
         default:
             break;
     }
-    reInitialize(result);
+    console.table(operation);
+    updateScreen(event, screen, operation, permit);
+    chainOperations(operation, permit);
 }
 
-function updateScreen(event) {
-    if(isCleanScreenActive) {
+function initializeCalculator() {
+    const operation = new Operation(null, null, null, null);
+    const permit = new Permit(false);
+    const digits = document.querySelectorAll(`.digit`);
+    const operators = document.querySelectorAll(`.operator`);
+    const equals = document.querySelector(`#equals`);
+    const screen = document.querySelector(`#screen`);
+    const clear = document.querySelector(`#clear`);
+    screen.textContent = `0`;
+    digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event, screen, operation, permit)));
+    operators.forEach(operator => operator.addEventListener(`click`, event => assignElements(event, screen, operation, permit)));
+    equals.addEventListener(`click`, event => {
+
+        if(!(operation.firstOperand === null)) {
+            operation.secondOperand = +screen.textContent;
+        }
+
+        operate(event, screen, operation, permit);
+    });
+    clear.addEventListener(`click`, () => clearMemory(screen, operation, permit));
+}
+
+function updateScreen(event, screen, operation, permit) {
+    if (permit.isCleanScreenActive) {
         screen.textContent = ``;
-        isCleanScreenActive = false;
-        canSecondOperatorBeAssigned = true;
-    }   
-
-    if(!(screen.textContent.includes(`.`) && event.target.textContent.includes(`.`))) screen.textContent += event.target.textContent;
+        permit.isCleanScreenActive = false;
     }
 
-function assignOperands(event) {
-    if(firstOperand === null) {
-        firstOperand = +screen.textContent;
-        isCleanScreenActive = true;
+    if(+screen.textContent === 0) {
+        screen.textContent =``;
+    }
+    
+    if(!(screen.textContent.includes(`.`) && (event.target.id === `dot`))) {
+        screen.textContent += event.target.textContent;
     }
 
-    else if(canSecondOperatorBeAssigned){
-        secondOperand = +screen.textContent;
+    if(!(operation.result === null)) {
+        screen.textContent = operation.result;
     }
-
-    if(!(firstOperand === null) && !(secondOperand === null) && !(operator === null)) {
-        operate(operator, firstOperand, secondOperand);
-    }
-
-    operator = +event.target.id;
 }
 
-function reInitialize(result) {
-    screen.textContent = result;
-    firstOperand = result;
-    secondOperand = null;
-    operator = null;
-    isCleanScreenActive = true;
-    canSecondOperatorBeAssigned = false;
+function assignElements(event, screen, operation, permit) {
+    if(operation.firstOperand === null) {
+        operation.firstOperand = +screen.textContent;
+        permit.isCleanScreenActive = true;
+    }
+
+    else if(!(operation.firstOperand === null)) {
+        operation.secondOperand = +screen.textContent;
+    }
+
+    if(!(operation.firstOperand === null) && !(operation.secondOperand === null) && !(operation.operator = null)) operate(event, screen, operation, permit);
+
+    operation.operator = +event.target.id;
 }
 
-function initialize() {
-    firstOperand = null;
-    secondOperand = null;
-    operator = null;
-    isCleanScreenActive = false;
-    canSecondOperatorBeAssigned = false;
+function chainOperations(operation, permit) {
+    operation.firstOperand = operation.result;
+    operation.secondOperand = null;
+    operation.result = null;
+    permit.isCleanScreenActive = true;
+}
+
+function clearMemory(screen, operation, permit) {
+    for(key in operation) {
+        operation[key] = null;
+    }
+
+    for(key in permit) {
+        permit[key] = null;
+    }
+
     screen.textContent = `0`;
 }
 
-const digits = document.querySelectorAll(`.digit`);
-const operators = document.querySelectorAll(`.operator`);
-const equals = document.querySelector(`#equals`);
-const screen = document.querySelector(`.screen`);
-const clear = document.querySelector(`#clear`);
-let firstOperand = null;
-let secondOperand = null;
-let operator = null;
-let isCleanScreenActive = false;
-let canSecondOperatorBeAssigned = false;
-screen.textContent = `0`;
+function Operation(operator, firstOperand, secondOperand, result){
+    this.operator = operator;
+    this.firstOperand = firstOperand;
+    this.secondOperand = secondOperand;
+    this.result = result;
+}
 
-clear.addEventListener(`click`, initialize);
-digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event)));
-operators.forEach(operator => operator.addEventListener(`click`, event => assignOperands(event)));
-equals.addEventListener(`click`, () => {
-    if(canSecondOperatorBeAssigned) {
-        secondOperand = +screen.textContent;
-    }
-    operate(operator, firstOperand, secondOperand);
-});
+function Permit(isCleanScreenActive) {
+    this.isCleanScreenActive = isCleanScreenActive;
+}
