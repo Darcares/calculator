@@ -50,7 +50,7 @@ function operate(event, screen, operation, permit) {
 
 function initializeCalculator() {
     const operation = new Operation(null, null, null, null);
-    const permit = new Permit(false);
+    const permit = new Permit(false, false);
     const digits = document.querySelectorAll(`.digit`);
     const operators = document.querySelectorAll(`.operator`);
     const equals = document.querySelector(`#equals`);
@@ -61,7 +61,7 @@ function initializeCalculator() {
     operators.forEach(operator => operator.addEventListener(`click`, event => assignElements(event, screen, operation, permit)));
     equals.addEventListener(`click`, event => {
 
-        if(!(operation.firstOperand === null)) {
+        if(permit.canBeSecondOperatorAssigned) {
             operation.secondOperand = +screen.textContent;
         }
 
@@ -74,6 +74,7 @@ function updateScreen(event, screen, operation, permit) {
     if (permit.isCleanScreenActive) {
         screen.textContent = ``;
         permit.isCleanScreenActive = false;
+        permit.canBeSecondOperatorAssigned = true;
     }
 
     if(+screen.textContent === 0) {
@@ -95,11 +96,11 @@ function assignElements(event, screen, operation, permit) {
         permit.isCleanScreenActive = true;
     }
 
-    else if(!(operation.firstOperand === null)) {
+    else if(permit.canBeSecondOperatorAssigned) {
         operation.secondOperand = +screen.textContent;
     }
 
-    if(!(operation.firstOperand === null) && !(operation.secondOperand === null) && !(operation.operator = null)) operate(event, screen, operation, permit);
+    if(!(operation.firstOperand === null) && !(operation.secondOperand === null) && !(operation.operator === null)) operate(event, screen, operation, permit);
 
     operation.operator = +event.target.id;
 }
@@ -109,6 +110,7 @@ function chainOperations(operation, permit) {
     operation.secondOperand = null;
     operation.result = null;
     permit.isCleanScreenActive = true;
+    permit.canBeSecondOperatorAssigned = false;
 }
 
 function clearMemory(screen, operation, permit) {
@@ -130,6 +132,7 @@ function Operation(operator, firstOperand, secondOperand, result){
     this.result = result;
 }
 
-function Permit(isCleanScreenActive) {
+function Permit(isCleanScreenActive, canBeSecondOperatorAssigned) {
     this.isCleanScreenActive = isCleanScreenActive;
+    this.canBeSecondOperatorAssigned = canBeSecondOperatorAssigned;
 }
