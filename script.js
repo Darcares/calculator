@@ -1,22 +1,22 @@
 initializeCalculator();
 
 function add(firstOperand, secondOperand) {
-    const result = (firstOperand + secondOperand);
+    const result = addRemoveDecimals(firstOperand + secondOperand);
     return result;
 }
 
 function subtract(firstOperand, secondOperand) {
-    const result = (firstOperand - secondOperand);
+    const result = addRemoveDecimals(firstOperand - secondOperand);
     return result;
 }
 
 function multiply(firstOperand, secondOperand) {
-    const result = (firstOperand * secondOperand);
+    const result = addRemoveDecimals(firstOperand * secondOperand);
     return result;
 }
 
 function divide(firstOperand, secondOperand) {
-    const result = (firstOperand / secondOperand);
+    const result = addRemoveDecimals(firstOperand / secondOperand);
     return result;
 }
 
@@ -123,6 +123,16 @@ function clearMemory(screen, operation, permit) {
     }
 
     screen.textContent = `0`;
+}
+
+function addRemoveDecimals(result) {
+    if(!(Number.isInteger(result))) {
+        return result.toFixed(2);
+    }
+    
+    else {
+        return result;
+    }
 }
 
 function Operation(operator, firstOperand, secondOperand, result){
