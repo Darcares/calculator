@@ -9,10 +9,10 @@ body {
 
 .main-container {
     height: 70%;
-    width: 35%;
     border: 2px solid black;
     display: flex;
     flex-direction: column;
+    aspect-ratio: 1 / 1;
 }
 
 #screen {
