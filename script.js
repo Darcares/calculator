@@ -43,7 +43,6 @@ function operate(event, screen, operation, permit) {
         default:
             break;
     }
-    console.table(operation);
     updateScreen(event, screen, operation, permit);
     chainOperations(operation, permit);
 }
@@ -127,7 +126,7 @@ function clearMemory(screen, operation, permit) {
 
 function addRemoveDecimals(result) {
     if(!(Number.isInteger(result))) {
-        return result.toFixed(2);
+        return +result.toFixed(2);
     }
     
     else {

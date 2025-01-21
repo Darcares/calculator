@@ -20,6 +20,7 @@ body {
     font-size: 500%;
     margin: 1%;
     border: 1px solid black;
+    text-align: right;
 }
 
 .row {
