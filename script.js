@@ -24,19 +24,19 @@ function operate(event, screen, operation, permit) {
 
     switch(operation.operator) {
 
-        case 10:
+        case `+`:
             operation.result = add(operation.firstOperand, operation.secondOperand);
             break;
         
-        case 20:
+        case `-`:
             operation.result = subtract(operation.firstOperand, operation.secondOperand);
             break;
         
-        case 30:
+        case `*`:
             operation.result = multiply(operation.firstOperand, operation.secondOperand);
             break;
 
-        case 40:
+        case `/`:
             operation.result = divide(operation.firstOperand, operation.secondOperand);
             break;
         
@@ -58,15 +58,9 @@ function initializeCalculator() {
     screen.textContent = `0`;
     digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event, screen, operation, permit)));
     operators.forEach(operator => operator.addEventListener(`click`, event => assignElements(event, screen, operation, permit)));
-    equals.addEventListener(`click`, event => {
-
-        if(permit.canBeSecondOperatorAssigned) {
-            operation.secondOperand = +screen.textContent;
-        }
-
-        operate(event, screen, operation, permit);
-    });
+    equals.addEventListener(`click`, event => processNumbers(event, screen, operation, permit));
     clear.addEventListener(`click`, () => clearMemory(screen, operation, permit));
+    document.addEventListener(`keydown`, event => readKeyboard(event, screen, operation, permit));
 }
 
 function updateScreen(event, screen, operation, permit) {
@@ -80,7 +74,7 @@ function updateScreen(event, screen, operation, permit) {
         screen.textContent =``;
     }
     
-    if(!(screen.textContent.includes(`.`) && (event.target.id === `dot`))) {
+    if(!(screen.textContent.includes(`.`) && (event.target.id === `.`))) {
         screen.textContent += event.target.textContent;
     }
 
@@ -101,7 +95,7 @@ function assignElements(event, screen, operation, permit) {
 
     if(!(operation.firstOperand === null) && !(operation.secondOperand === null) && !(operation.operator === null)) operate(event, screen, operation, permit);
 
-    operation.operator = +event.target.id;
+    operation.operator = event.target.id;
 }
 
 function chainOperations(operation, permit) {
@@ -131,6 +125,47 @@ function addRemoveDecimals(result) {
     
     else {
         return result;
+    }
+}
+
+function processNumbers(event, screen, operation, permit) {
+
+    if(permit.canBeSecondOperatorAssigned) {
+        operation.secondOperand = +screen.textContent;
+    }
+
+    operate(event, screen, operation, permit);
+}
+
+function readKeyboard(event, screen, operation, permit) {
+    const DIGITS = [`0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `.`];
+    const OPERATORS = [`+`, `-`, `*`, `/`];
+    const EQUALS = `Enter`;
+    const CLEAR = `Delete`;
+    if(DIGITS.includes(event.key)) {
+        const DIGIT_LIKE_OBJECT = {
+            target: {id: null, textContent: null}
+        };
+    
+         DIGIT_LIKE_OBJECT.target.id = event.key;
+         DIGIT_LIKE_OBJECT.target.textContent = event.key;
+         updateScreen(DIGIT_LIKE_OBJECT, screen, operation, permit);
+    }
+
+    if(OPERATORS.includes(event.key)) {
+        const OPERATOR_LIKE_OBJECT = {
+            target: {id: null}
+        };
+        OPERATOR_LIKE_OBJECT.target.id = event.key;
+        assignElements(OPERATOR_LIKE_OBJECT, screen, operation, permit);
+    }
+
+    if(EQUALS === event.key) {
+        processNumbers(event, screen, operation, permit);
+    }
+
+    if(CLEAR === event.key) {
+        clearMemory(screen, operation, permit);
     }
 }
 
