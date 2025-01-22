@@ -60,8 +60,8 @@ function initializeCalculator() {
     digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event, screen, operation, permit)));
     operators.forEach(operator => operator.addEventListener(`click`, event => assignElements(event, screen, operation, permit)));
     equals.addEventListener(`click`, event => processNumbers(event, screen, operation, permit));
-    clear.addEventListener(`click`, () => clearMemory(screen, operation, permit));
-    backspace.addEventListener(`click`, () => eraseLastElement(screen));
+    clear.addEventListener(`click`, (event) => clearMemory(event, screen, operation, permit));
+    backspace.addEventListener(`click`, (event) => eraseLastElement(event, screen));
     document.addEventListener(`keydown`, event => readKeyboard(event, screen, operation, permit));
 }
 
@@ -88,6 +88,8 @@ function updateScreen(event, screen, operation, permit) {
             screen.textContent = `NUMBER TO BIG`;
         }
     }
+
+    event.target.blur();
  
 }
 
@@ -104,6 +106,8 @@ function assignElements(event, screen, operation, permit) {
     if(!(operation.firstOperand === null) && !(operation.secondOperand === null) && !(operation.operator === null)) operate(event, screen, operation, permit);
 
     operation.operator = event.target.id;
+
+    event.target.blur();
 }
 
 function chainOperations(operation, permit) {
@@ -114,7 +118,7 @@ function chainOperations(operation, permit) {
     permit.canBeSecondOperatorAssigned = false;
 }
 
-function clearMemory(screen, operation, permit) {
+function clearMemory(event, screen, operation, permit) {
     for(key in operation) {
         operation[key] = null;
     }
@@ -124,6 +128,7 @@ function clearMemory(screen, operation, permit) {
     }
 
     screen.textContent = `0`;
+    event.target.blur();
 }
 
 function addRemoveDecimals(result) {
@@ -143,7 +148,7 @@ function processNumbers(event, screen, operation, permit) {
         operate(event, screen, operation, permit);
     }
 
-    
+    event.target.blur();
 }
 
 function readKeyboard(event, screen, operation, permit) {
@@ -183,11 +188,13 @@ function readKeyboard(event, screen, operation, permit) {
     }
 }
 
-function eraseLastElement(screen) {
+function eraseLastElement(event, screen) {
     screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
     if(screen.textContent.length === 0) {
         screen.textContent = `0`;
     }
+
+    event.target.blur();
 }
 
 function Operation(operator, firstOperand, secondOperand, result){
