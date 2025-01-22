@@ -55,11 +55,13 @@ function initializeCalculator() {
     const equals = document.querySelector(`#equals`);
     const screen = document.querySelector(`#screen`);
     const clear = document.querySelector(`#clear`);
+    const backspace = document.querySelector(`#backspace`);
     screen.textContent = `0`;
     digits.forEach(digit => digit.addEventListener(`click`, event => updateScreen(event, screen, operation, permit)));
     operators.forEach(operator => operator.addEventListener(`click`, event => assignElements(event, screen, operation, permit)));
     equals.addEventListener(`click`, event => processNumbers(event, screen, operation, permit));
     clear.addEventListener(`click`, () => clearMemory(screen, operation, permit));
+    backspace.addEventListener(`click`, () => eraseLastElement(screen));
     document.addEventListener(`keydown`, event => readKeyboard(event, screen, operation, permit));
 }
 
@@ -142,6 +144,7 @@ function readKeyboard(event, screen, operation, permit) {
     const OPERATORS = [`+`, `-`, `*`, `/`];
     const EQUALS = `Enter`;
     const CLEAR = `Delete`;
+    const BACKSPACE = `Backspace`;
     if(DIGITS.includes(event.key)) {
         const DIGIT_LIKE_OBJECT = {
             target: {id: null, textContent: null}
@@ -167,6 +170,14 @@ function readKeyboard(event, screen, operation, permit) {
     if(CLEAR === event.key) {
         clearMemory(screen, operation, permit);
     }
+
+    if(BACKSPACE === event.key) {
+        eraseLastElement(screen);
+    }
+}
+
+function eraseLastElement(screen) {
+    screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
 }
 
 function Operation(operator, firstOperand, secondOperand, result){
