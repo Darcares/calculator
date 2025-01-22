@@ -73,16 +73,22 @@ function updateScreen(event, screen, operation, permit) {
     }
 
     if(+screen.textContent === 0) {
-        screen.textContent =``;
+        screen.textContent = ``;
     }
     
     if(!(screen.textContent.includes(`.`) && (event.target.id === `.`))) {
-        screen.textContent += event.target.textContent;
+        if(screen.textContent.length <= 12) {
+            screen.textContent += event.target.textContent;
+        }
     }
 
     if(!(operation.result === null)) {
         screen.textContent = operation.result;
+        if(screen.textContent.length > 12) {
+            screen.textContent = `NUMBER TO BIG`;
+        }
     }
+ 
 }
 
 function assignElements(event, screen, operation, permit) {
@@ -134,9 +140,10 @@ function processNumbers(event, screen, operation, permit) {
 
     if(permit.canBeSecondOperatorAssigned) {
         operation.secondOperand = +screen.textContent;
+        operate(event, screen, operation, permit);
     }
 
-    operate(event, screen, operation, permit);
+    
 }
 
 function readKeyboard(event, screen, operation, permit) {
@@ -178,6 +185,9 @@ function readKeyboard(event, screen, operation, permit) {
 
 function eraseLastElement(screen) {
     screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
+    if(screen.textContent.length === 0) {
+        screen.textContent = `0`;
+    }
 }
 
 function Operation(operator, firstOperand, secondOperand, result){
