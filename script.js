@@ -49,7 +49,7 @@ function operate(event, screen, operation, permit) {
 
 function initializeCalculator() {
     const operation = new Operation(null, null, null, null);
-    const permit = new Permit(false, false);
+    const permit = new Permit(false, false, true);
     const digits = document.querySelectorAll(`.digit`);
     const operators = document.querySelectorAll(`.operator`);
     const equals = document.querySelector(`#equals`);
@@ -61,7 +61,7 @@ function initializeCalculator() {
     operators.forEach(operator => operator.addEventListener(`click`, event => assignElements(event, screen, operation, permit)));
     equals.addEventListener(`click`, event => processNumbers(event, screen, operation, permit));
     clear.addEventListener(`click`, (event) => clearMemory(event, screen, operation, permit));
-    backspace.addEventListener(`click`, (event) => eraseLastElement(event, screen));
+    backspace.addEventListener(`click`, (event) => eraseLastElement(event, screen, permit));
     document.addEventListener(`keydown`, event => readKeyboard(event, screen, operation, permit));
 }
 
@@ -70,6 +70,7 @@ function updateScreen(event, screen, operation, permit) {
         screen.textContent = ``;
         permit.isCleanScreenActive = false;
         permit.canBeSecondOperatorAssigned = true;
+        permit.isEraseElementEnabled = true;
     }
 
     if(+screen.textContent === 0) {
@@ -78,7 +79,7 @@ function updateScreen(event, screen, operation, permit) {
     
     if(!(screen.textContent.includes(`.`) && (event.target.id === `.`))) {
         if(screen.textContent.length <= 12) {
-            screen.textContent += event.target.textContent;
+            screen.textContent += event.target.id;
         }
     }
 
@@ -88,8 +89,9 @@ function updateScreen(event, screen, operation, permit) {
             screen.textContent = `NUMBER TO BIG`;
         }
     }
-
-    event.target.blur();
+    if((event.isButton)) {
+        event.target.blur();
+    }
  
 }
 
@@ -97,6 +99,7 @@ function assignElements(event, screen, operation, permit) {
     if(operation.firstOperand === null) {
         operation.firstOperand = +screen.textContent;
         permit.isCleanScreenActive = true;
+        permit.isEraseElementEnabled = false;
     }
 
     else if(permit.canBeSecondOperatorAssigned) {
@@ -107,7 +110,9 @@ function assignElements(event, screen, operation, permit) {
 
     operation.operator = event.target.id;
 
-    event.target.blur();
+    if((event.isButton)) {
+        event.target.blur();
+    }
 }
 
 function chainOperations(operation, permit) {
@@ -116,6 +121,7 @@ function chainOperations(operation, permit) {
     operation.result = null;
     permit.isCleanScreenActive = true;
     permit.canBeSecondOperatorAssigned = false;
+    permit.isEraseElementEnabled = false;
 }
 
 function clearMemory(event, screen, operation, permit) {
@@ -124,7 +130,10 @@ function clearMemory(event, screen, operation, permit) {
     }
 
     for(key in permit) {
-        permit[key] = null;
+        permit[key] = false;
+        if(key === `isEraseElementEnabled`) {
+            permit[key] = true;
+        }
     }
 
     screen.textContent = `0`;
@@ -159,7 +168,7 @@ function readKeyboard(event, screen, operation, permit) {
     const BACKSPACE = `Backspace`;
     if(DIGITS.includes(event.key)) {
         const DIGIT_LIKE_OBJECT = {
-            target: {id: null, textContent: null}
+            target: {id: null, isButton: false}
         };
     
          DIGIT_LIKE_OBJECT.target.id = event.key;
@@ -169,7 +178,7 @@ function readKeyboard(event, screen, operation, permit) {
 
     if(OPERATORS.includes(event.key)) {
         const OPERATOR_LIKE_OBJECT = {
-            target: {id: null}
+            target: {id: null, isButton: false}
         };
         OPERATOR_LIKE_OBJECT.target.id = event.key;
         assignElements(OPERATOR_LIKE_OBJECT, screen, operation, permit);
@@ -180,18 +189,20 @@ function readKeyboard(event, screen, operation, permit) {
     }
 
     if(CLEAR === event.key) {
-        clearMemory(screen, operation, permit);
+        clearMemory(event, screen, operation, permit);
     }
 
     if(BACKSPACE === event.key) {
-        eraseLastElement(screen);
+        eraseLastElement(event, screen, permit);
     }
 }
 
-function eraseLastElement(event, screen) {
-    screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
-    if(screen.textContent.length === 0) {
-        screen.textContent = `0`;
+function eraseLastElement(event, screen, permit) {
+    if(permit.isEraseElementEnabled) {
+        screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
+        if(screen.textContent.length === 0) {
+            screen.textContent = `0`;
+        }
     }
 
     event.target.blur();
@@ -204,7 +215,8 @@ function Operation(operator, firstOperand, secondOperand, result){
     this.result = result;
 }
 
-function Permit(isCleanScreenActive, canBeSecondOperatorAssigned) {
+function Permit(isCleanScreenActive, canBeSecondOperatorAssigned, isEraseElementEnabled) {
     this.isCleanScreenActive = isCleanScreenActive;
     this.canBeSecondOperatorAssigned = canBeSecondOperatorAssigned;
+    this.isEraseElementEnabled = isEraseElementEnabled;
 }
