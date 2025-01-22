@@ -5,15 +5,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #18a8bf;
 }
 
 #main-container {
-    width: 50%;
+    width: 45%;
     border: 2px solid black;
     display: flex;
     flex-direction: column;
     aspect-ratio: 1 / 1;
     min-width: max-content;
+    background-color: #424242;
 }
 
 #screen {
@@ -21,7 +23,10 @@ body {
     font-size: 500%;
     margin: 1%;
     border: 1px solid black;
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #a2bf52;
 }
 
 .row {
@@ -32,5 +37,23 @@ body {
 button {
     font-size: 270%;
     flex: 1;
-    margin: 1%
+    margin: 1%;
+    color: #f5f6f5;
+}
+
+#equals {
+    background-color: #f79700;
+}
+
+#backspace, 
+#clear {
+    background-color: #e4374f;
+}
+
+.digit {
+    background-color: #404040;;
+}
+
+.operator {
+    background-color: #b0b0b0;
 }
