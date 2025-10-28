@@ -20,6 +20,8 @@ body {
 .screen {
     background-color: green;
     flex: 1;
+    font-size: 75px;
+    text-align: right;
 }
 
 .buttons {
@@ -35,4 +37,5 @@ body {
 
 button {
     flex: 1;
+    font-size: xx-large;
 }
