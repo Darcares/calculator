@@ -67,4 +67,9 @@ function initializeProgram() {
     operators.forEach(operator => operator.addEventListener('click', (e) => {
         console.log(e.target.textContent);
     }));
+
+    const equals = document.querySelector('.equals');
+    equals.addEventListener('click', (e) => {
+        console.log(e.target.textContent);
+    })
 }
