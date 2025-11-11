@@ -57,8 +57,14 @@ function printScreen(content) {
 }
 
 function initializeProgram() {
+
     const numbers = document.querySelectorAll('.number');
     numbers.forEach(number => number.addEventListener('click', (e) => {
         printScreen(e.target.textContent);
+    }));
+
+    const operators = document.querySelectorAll('.operator');
+    operators.forEach(operator => operator.addEventListener('click', (e) => {
+        console.log(e.target.textContent);
     }));
 }
