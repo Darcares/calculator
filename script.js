@@ -1,3 +1,5 @@
+initializeProgram();
+
 let numOne = null;
 let numTwo = null;
 let operator = null;
@@ -44,5 +46,19 @@ function operate(numOne, numTwo, operator) {
 
 function printScreen(content) {
     const screen = document.querySelector('.screen');
-    screen.textContent = `Test`;
+
+    if(screen.textContent === '0') {
+        screen.textContent = content;
+    }
+
+    else {
+        screen.textContent = screen.textContent += content;
+    }  
+}
+
+function initializeProgram() {
+    const numbers = document.querySelectorAll('.number');
+    numbers.forEach(number => number.addEventListener('click', (e) => {
+        printScreen(e.target.textContent);
+    }));
 }
