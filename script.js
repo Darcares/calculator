@@ -1,8 +1,5 @@
 initializeProgram();
 
-let numOne = null;
-let numTwo = null;
-let operator = null;
 
 function add(numOne, numTwo) {
     return numOne + numTwo;
@@ -44,32 +41,48 @@ function operate(numOne, numTwo, operator) {
     }
 }
 
-function printScreen(content) {
-    const screen = document.querySelector('.screen');
-
-    if(screen.textContent === '0') {
-        screen.textContent = content;
-    }
-
-    else {
-        screen.textContent = screen.textContent += content;
-    }  
-}
 
 function initializeProgram() {
 
+    const screen = document.querySelector('.screen');
+
+    let operation = {
+        numOne: null,
+        numTwo: null,
+        result: null,
+        operator: null,
+    };
+
     const numbers = document.querySelectorAll('.number');
-    numbers.forEach(number => number.addEventListener('click', (e) => {
-        printScreen(e.target.textContent);
+    numbers.forEach(number => number.addEventListener('click', (event) => {
+        printScreen(event.target.textContent);
     }));
 
     const operators = document.querySelectorAll('.operator');
-    operators.forEach(operator => operator.addEventListener('click', (e) => {
-        console.log(e.target.textContent);
+    operators.forEach(operator => operator.addEventListener('click', (event) => {
+        assignElements(event);
     }));
 
     const equals = document.querySelector('.equals');
-    equals.addEventListener('click', (e) => {
-        console.log(e.target.textContent);
+    equals.addEventListener('click', (event) => {
+        console.log(event.target.textContent);
     })
+
+    function assignElements(event) {
+        operation.numOne = +screen.textContent;
+        operation.operator = event.target.textContent;
+        console.log(operation.numOne);
+        console.log(operation.operator);
+    }    
+
+    function printScreen(content) {
+
+        if(screen.textContent === '0') {
+            screen.textContent = content;
+        }
+
+        else {
+            screen.textContent = screen.textContent += content;
+        }  
+    }
 }
