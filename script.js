@@ -17,30 +17,6 @@ function divide(numOne, numTwo) {
     return numOne / numTwo;
 }
 
-function operate(numOne, numTwo, operator) {
-    switch(operator) {
-        case "add":
-            return add(numOne,numTwo);
-            break;
-
-        case "subtract":
-            return subtract(numOne, numTwo);
-            break;
-
-        case "multiply":
-            return multiply(numOne, numTwo);
-            break;
-
-        case "divide": 
-            return divide(numOne, numTwo);
-            break;
-
-        default:
-            console.log("Error");
-            break;
-    }
-}
-
 
 function initializeProgram() {
 
@@ -60,20 +36,26 @@ function initializeProgram() {
 
     const operators = document.querySelectorAll('.operator');
     operators.forEach(operator => operator.addEventListener('click', (event) => {
-        assignElements(event);
+        assignNumOneAndOperator(event);
     }));
 
     const equals = document.querySelector('.equals');
     equals.addEventListener('click', (event) => {
-        console.log(event.target.textContent);
+        operate();
     })
 
-    function assignElements(event) {
+    function assignNumOneAndOperator(event) {
         operation.numOne = +screen.textContent;
         operation.operator = event.target.textContent;
+        screen.textContent = '0';
         console.log(operation.numOne);
         console.log(operation.operator);
     }    
+
+    function assignNumTwo() {
+        operation.numTwo = +screen.textContent;
+        console.log(operation.numTwo);
+    }
 
     function printScreen(content) {
 
@@ -84,5 +66,32 @@ function initializeProgram() {
         else {
             screen.textContent = screen.textContent += content;
         }  
+    }
+
+    function operate() {
+
+        assignNumTwo();
+
+        switch(operation.operator) {
+            case "+":
+            screen.textContent = add(operation.numOne,operation.numTwo);
+            break;
+
+            case "-":
+            screen.textContent = subtract(operation.numOne,operation.numTwo);
+            break;
+
+            case "*":
+            screen.textContent = multiply(operation.numOne,operation.numTwo);
+            break;
+
+            case "/": 
+            screen.textContent = divide(operation.numOne,operation.numTwo);
+            break;
+
+            default:
+            screen.textContent = "Error";
+            break;
+        }    
     }
 }
