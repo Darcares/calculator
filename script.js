@@ -36,7 +36,7 @@ function initializeProgram() {
 
     const operators = document.querySelectorAll('.operator');
     operators.forEach(operator => operator.addEventListener('click', (event) => {
-        assignNumOneAndOperator(event);
+        assignOperationElements(event);
     }));
 
     const equals = document.querySelector('.equals');
@@ -44,18 +44,21 @@ function initializeProgram() {
         operate();
     })
 
-    function assignNumOneAndOperator(event) {
-        operation.numOne = +screen.textContent;
-        operation.operator = event.target.textContent;
-        screen.textContent = '0';
-        console.log(operation.numOne);
-        console.log(operation.operator);
-    }    
+    function assignOperationElements(event) {
 
-    function assignNumTwo() {
-        operation.numTwo = +screen.textContent;
-        console.log(operation.numTwo);
-    }
+        if(operation.numOne === null) {
+            operation.numOne = +screen.textContent;
+            operation.operator = event.target.textContent;
+            screen.textContent = '0';
+            console.log('NumOne: ' + operation.numOne);
+            console.log('Operator: ' + operation.operator);
+        }
+
+        else if(operation.numOne !== null && operation.numTwo === null) {
+            operation.numTwo = +screen.textContent;
+            console.log('NumTwo: ' + operation.numTwo);
+        }
+    }    
 
     function printScreen(content) {
 
@@ -66,32 +69,48 @@ function initializeProgram() {
         else {
             screen.textContent = screen.textContent += content;
         }  
+
+        if(operation.result !== null) screen.textContent = operation.result;
     }
 
     function operate() {
 
-        assignNumTwo();
+        assignOperationElements();
 
         switch(operation.operator) {
             case "+":
-            screen.textContent = add(operation.numOne,operation.numTwo);
+            operation.result = add(operation.numOne,operation.numTwo);
+            printScreen(operation.result);
+            chainOperation();
             break;
 
             case "-":
-            screen.textContent = subtract(operation.numOne,operation.numTwo);
+            operation.result = subtract(operation.numOne,operation.numTwo);
+            printScreen(operation.result);
+            chainOperation();
             break;
 
             case "*":
-            screen.textContent = multiply(operation.numOne,operation.numTwo);
+            operation.result = multiply(operation.numOne,operation.numTwo);
+            printScreen(operation.result);
+            chainOperation();
             break;
 
             case "/": 
-            screen.textContent = divide(operation.numOne,operation.numTwo);
+            operation.result = divide(operation.numOne,operation.numTwo);
+            printScreen(operation.result);
+            chainOperation();
             break;
 
             default:
             screen.textContent = "Error";
             break;
         }    
+    }
+
+    function chainOperation() {
+        operation.numOne = operation.result;
+        operation.numTwo = null;
+        operation.result = null;
     }
 }
