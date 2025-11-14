@@ -27,6 +27,7 @@ function initializeProgram() {
         numTwo: null,
         result: null,
         operator: null,
+        cleanScreen: false,
     };
 
     const numbers = document.querySelectorAll('.number');
@@ -41,7 +42,7 @@ function initializeProgram() {
 
     const equals = document.querySelector('.equals');
     equals.addEventListener('click', (event) => {
-        operate();
+        operate(event);
     })
 
     function assignOperationElements(event) {
@@ -49,50 +50,61 @@ function initializeProgram() {
         if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null) {
             operation.numOne = +screen.textContent;
             operation.operator = event.target.textContent;
-            screen.textContent = '0';
+            operation.cleanScreen = true;
             console.log('NumOne: ' + operation.numOne);
             console.log('Operator: ' + operation.operator);
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'equals') {
             operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
         }
 
         else if(operation.numOne !== null && operation.numTwo !== null && operation.result !== null && operation.operator !== null) {
-            console.log('Chaining');
+            console.log('*************Chaining*************');
             operation.numOne = operation.result;
             operation.numTwo = null;
             operation.result = null;
             operation.operator = event.target.textContent;
-            screen.textContent = '0';
+            console.log('Num One: ' + operation.numOne);
+            console.log('Operator: ' + operation.operator);
+            operation.cleanScreen = true;
         }
 
-        /*else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator') {
             console.log('Operate by operators, not equals.');
-            //operation.numTwo = +screen.textContent;
+            operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
-            operate();
-            operation.operator = event.target.textContent;
-        }*/
+            operate(event);
+            assignOperationElements(event);
+        }
+
+        else {
+            console.log('This is why I work');
+        }
     }    
 
     function printScreen(content) {
+
+        if(operation.cleanScreen) { 
+            screen.textContent = '';
+            operation.cleanScreen = false; 
+        }
 
         if(screen.textContent === '0') {
             screen.textContent = content;
         }
 
-        else {
+        else{
             screen.textContent = screen.textContent += content;
         }  
 
         if(operation.result !== null) screen.textContent = operation.result;
     }
 
-    function operate() {
+    function operate(event) {
 
-        assignOperationElements();
+        assignOperationElements(event);
         
 
         switch(operation.operator) {
@@ -101,28 +113,24 @@ function initializeProgram() {
             operation.result = add(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
-            //chainOperation();
             break;
 
             case "-":
             operation.result = subtract(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
-            //chainOperation();
             break;
 
             case "*":
             operation.result = multiply(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
-            //chainOperation();
             break;
 
             case "/": 
             operation.result = divide(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
-            //chainOperation();
             break;
 
             default:
@@ -131,10 +139,4 @@ function initializeProgram() {
         }    
     }
 
-    function chainOperation() {
-        operation.numOne = operation.result;
-        operation.operator = null;
-        operation.numTwo = null;
-        operation.result = null;
-    }
 }
