@@ -31,19 +31,14 @@ function initializeProgram() {
     };
 
     const numbers = document.querySelectorAll('.number');
-    numbers.forEach(number => number.addEventListener('click', (event) => {
-        printScreen(event.target.textContent);
-    }));
+    numbers.forEach(number => number.addEventListener('click', printScreen));
 
     const operators = document.querySelectorAll('.operator');
-    operators.forEach(operator => operator.addEventListener('click', (event) => {
-        assignOperationElements(event);
-    }));
+    operators.forEach(operator => operator.addEventListener('click', assignOperationElements));
+    
 
     const equals = document.querySelector('.equals');
-    equals.addEventListener('click', (event) => {
-        operate(event);
-    })
+    equals.addEventListener('click', operate);
 
     const clear = document.querySelector('.clear');
     clear.addEventListener('click', clearProgram);
@@ -96,22 +91,30 @@ function initializeProgram() {
         }
     }    
 
-    function printScreen(content) {
+    function printScreen(event) {
 
-        if(operation.cleanScreen) { 
-            screen.textContent = '';
-            operation.cleanScreen = false; 
+        if(operation.result !== null) {
+            screen.textContent = operation.result;
         }
 
-        if(screen.textContent === '0') {
-            screen.textContent = content;
+        else {
+            const content = event.target.textContent;
+
+            if(operation.cleanScreen) { 
+                screen.textContent = '';
+                operation.cleanScreen = false; 
+            }
+
+            if(screen.textContent === '0') {
+                screen.textContent = content;
+            }
+
+            else{
+                screen.textContent = screen.textContent += content;
+            }  
+
         }
 
-        else{
-            screen.textContent = screen.textContent += content;
-        }  
-
-        if(operation.result !== null) screen.textContent = operation.result;
     }
 
     function operate(event) {
