@@ -45,13 +45,27 @@ function initializeProgram() {
     const back = document.querySelector('.back');
     back.addEventListener('click', backspace);
 
-    function clearProgram() {
-        operation.numOne = null;
-        operation.numTwo = null;
-        operation.result = null;
-        operation.operator = null;
-        cleanScreen = false;
-        screen.textContent = '0';
+    function clearProgram(event) {
+
+        if(event.target.className === 'clear') {
+            operation.numOne = null;
+            operation.numTwo = null;
+            operation.result = null;
+            operation.operator = null;
+            cleanScreen = false;
+            screen.textContent = '0';
+        }
+
+        else {
+            operation.numOne = null;
+            operation.numTwo = null;
+            operation.result = null;
+            operation.operator = null;
+            cleanScreen = false;
+            screen.textContent = '0';
+            printScreen(event);
+        }
+  
     }
 
     function backspace() {
@@ -87,7 +101,7 @@ function initializeProgram() {
             operation.cleanScreen = true;
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator'  && operation.cleanScreen === false) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator' && operation.cleanScreen === false) {
             console.log('Operate by operators, not equals.');
             operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
@@ -95,7 +109,7 @@ function initializeProgram() {
             assignOperationElements(event);
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator'  && operation.cleanScreen === true) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator' && operation.cleanScreen === true) {
             console.log('Change operator');
             operation.operator = event.target.textContent;
         }
@@ -107,8 +121,13 @@ function initializeProgram() {
 
     function printScreen(event) {
 
-        if(operation.result !== null) {
+        if(operation.result !== null && operation.cleanScreen === false) {
             screen.textContent = operation.result;
+            
+        }
+
+        else if(operation.result !== null && operation.cleanScreen === true) {
+            clearProgram(event);
         }
 
         else {
@@ -143,24 +162,28 @@ function initializeProgram() {
             operation.result = add(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
+            operation.cleanScreen = true;
             break;
 
             case "-":
             operation.result = subtract(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
+            operation.cleanScreen = true;
             break;
 
             case "*":
             operation.result = multiply(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
+            operation.cleanScreen = true;
             break;
 
             case "/": 
             operation.result = divide(operation.numOne,operation.numTwo);
             printScreen(operation.result);
             console.log('Result: ' + operation.result);
+            operation.cleanScreen = true;
             break;
 
             default:
