@@ -71,7 +71,7 @@ function initializeProgram() {
             console.log('Operator: ' + operation.operator);
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'equals') {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'equals' && operation.cleanScreen === false) {
             operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
         }
@@ -87,12 +87,17 @@ function initializeProgram() {
             operation.cleanScreen = true;
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator') {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator'  && operation.cleanScreen === false) {
             console.log('Operate by operators, not equals.');
             operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
             operate(event);
             assignOperationElements(event);
+        }
+
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator'  && operation.cleanScreen === true) {
+            console.log('Change operator');
+            operation.operator = event.target.textContent;
         }
 
         else {
