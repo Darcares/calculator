@@ -36,12 +36,14 @@ function initializeProgram() {
     const operators = document.querySelectorAll('.operator');
     operators.forEach(operator => operator.addEventListener('click', assignOperationElements));
     
-
     const equals = document.querySelector('.equals');
     equals.addEventListener('click', operate);
 
     const clear = document.querySelector('.clear');
     clear.addEventListener('click', clearProgram);
+
+    const back = document.querySelector('.back');
+    back.addEventListener('click', backspace);
 
     function clearProgram() {
         operation.numOne = null;
@@ -50,6 +52,13 @@ function initializeProgram() {
         operation.operator = null;
         cleanScreen = false;
         screen.textContent = '0';
+    }
+
+    function backspace() {
+
+        screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
+        if(screen.textContent < 1) screen.textContent = '0';
+    
     }
 
     function assignOperationElements(event) {
