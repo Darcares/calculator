@@ -45,6 +45,18 @@ function initializeProgram() {
         operate(event);
     })
 
+    const clear = document.querySelector('.clear');
+    clear.addEventListener('click', clearProgram);
+
+    function clearProgram() {
+        operation.numOne = null;
+        operation.numTwo = null;
+        operation.result = null;
+        operation.operator = null;
+        cleanScreen = false;
+        screen.textContent = '0';
+    }
+
     function assignOperationElements(event) {
 
         if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null) {
