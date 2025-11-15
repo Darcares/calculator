@@ -63,7 +63,7 @@ function initializeProgram() {
 
     function assignOperationElements(event) {
 
-        if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null) {
+        if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null && event.target.className === 'operator') {
             operation.numOne = +screen.textContent;
             operation.operator = event.target.textContent;
             operation.cleanScreen = true;
@@ -130,8 +130,9 @@ function initializeProgram() {
 
         assignOperationElements(event);
         
-
-        switch(operation.operator) {
+        if(operation.numOne !== null && operation.numTwo !== null && operation.operator !== null) {
+            
+            switch(operation.operator) {
 
             case "+":
             operation.result = add(operation.numOne,operation.numTwo);
@@ -160,7 +161,9 @@ function initializeProgram() {
             default:
             screen.textContent = "Error";
             break;
-        }    
+            }  
+        }
+  
     }
 
 }
