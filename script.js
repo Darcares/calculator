@@ -45,6 +45,9 @@ function initializeProgram() {
     const back = document.querySelector('.back');
     back.addEventListener('click', backspace);
 
+    const dot = document.querySelector('.dot');
+    dot.addEventListener('click', printScreen);
+
     function clearProgram(event) {
 
         if(event.target.className === 'clear') {
@@ -138,18 +141,23 @@ function initializeProgram() {
                 operation.cleanScreen = false; 
             }
 
-            if(screen.textContent === '0') {
+            if(screen.textContent === '0' && content !== '.') {
                 screen.textContent = content;
             }
 
-            else{
+            else if(screen.textContent === '0' && content === '.'){
                 screen.textContent = screen.textContent += content;
-            }  
+            }
 
-        }
+            else if(screen.textContent.includes('.') && content === '.'){
+                /* Empty block, nothing should be done here*/
+            }
 
+            else {
+                screen.textContent = screen.textContent += content;
+            }
     }
-
+}
     function operate(event) {
 
         assignOperationElements(event);
