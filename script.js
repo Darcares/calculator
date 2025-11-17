@@ -48,9 +48,11 @@ function initializeProgram() {
     const dot = document.querySelector('.dot');
     dot.addEventListener('click', printScreen);
 
-    function clearProgram(event) {
+    captureKeyboard();
 
-        if(event.target.className === 'clear') {
+    function clearProgram(event) {
+        const content = (typeof event === 'object') ? event.target.className: event;
+        if(content === 'clear' || content === 'Delete') {
             operation.numOne = null;
             operation.numTwo = null;
             operation.result = null;
@@ -80,15 +82,17 @@ function initializeProgram() {
 
     function assignOperationElements(event) {
 
-        if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null && event.target.className === 'operator') {
+        const content = (typeof event === 'object') ? event.target.className : event;
+
+        if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null && (content === 'operator' || '/*-+'.includes(content))) {
             operation.numOne = +screen.textContent;
-            operation.operator = event.target.textContent;
+            operation.operator = (content === 'operator') ? event.target.textContent : content;
             operation.cleanScreen = true;
             console.log('NumOne: ' + operation.numOne);
             console.log('Operator: ' + operation.operator);
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'equals' && operation.cleanScreen === false) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && (content === 'equals' || content === 'Enter') && operation.cleanScreen === false) {
             operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
         }
@@ -98,13 +102,13 @@ function initializeProgram() {
             operation.numOne = operation.result;
             operation.numTwo = null;
             operation.result = null;
-            operation.operator = event.target.textContent;
+            operation.operator = (content === 'operator') ? event.target.textContent : content;
             console.log('Num One: ' + operation.numOne);
             console.log('Operator: ' + operation.operator);
             operation.cleanScreen = true;
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator' && operation.cleanScreen === false) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && (content === 'operator' || '/*-+'.includes(content)) && operation.cleanScreen === false) {
             console.log('Operate by operators, not equals.');
             operation.numTwo = +screen.textContent;
             console.log('NumTwo: ' + operation.numTwo);
@@ -112,9 +116,9 @@ function initializeProgram() {
             assignOperationElements(event);
         }
 
-        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && event.target.className === 'operator' && operation.cleanScreen === true) {
+        else if(operation.numOne !== null && operation.numTwo === null && operation.result === null && operation.operator !== null && (content === 'operator' || '/*-+'.includes(content)) && operation.cleanScreen === true) {
             console.log('Change operator');
-            operation.operator = event.target.textContent;
+            operation.operator = (content === 'operator') ? event.target.textContent : content;
         }
 
         else {
@@ -134,7 +138,8 @@ function initializeProgram() {
         }
 
         else {
-            const content = event.target.textContent;
+            
+            const content = (typeof event === "object") ? event.target.textContent : event;
 
             if(operation.cleanScreen) { 
                 screen.textContent = '';
@@ -200,6 +205,31 @@ function initializeProgram() {
             }  
         }
   
+    }
+
+    function captureKeyboard() {
+        document.addEventListener('keydown', (event) => {
+
+            if('0123456789.'.includes(event.key)) {
+                printScreen(event.key);
+            }
+
+            else if('+-*/'.includes(event.key)) {
+                assignOperationElements(event.key);
+            }
+
+            else if(event.key === 'Enter') {
+                operate(event.key);
+            }
+
+            else if(event.key === 'Backspace') {
+                backspace();
+            }
+
+            else if(event.key === 'Delete') {
+                clearProgram(event.key);
+            }
+        });
     }
 
 }
