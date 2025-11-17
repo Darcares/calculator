@@ -2,20 +2,32 @@ initializeProgram();
 
 
 function add(numOne, numTwo) {
-    return numOne + numTwo;
+    let result = numOne + numTwo;
+    if(!Number.isInteger(result)) result = fixDecimals(result);
+    return result;
 }
 
 function subtract(numOne, numTwo){
-    return numOne - numTwo;
+    let result = numOne - numTwo;
+    if(!Number.isInteger(result)) result = fixDecimals(result);
+    return result;
 }
 
 function multiply(numOne, numTwo) {
-    return numOne * numTwo;
+    let result = numOne * numTwo;
+    if(!Number.isInteger(result)) result = fixDecimals(result);
+    return result;
 }
 
 function divide(numOne, numTwo) {
-    if(numTwo !== 0) return numOne / numTwo;
-    return 'ERROR';
+    if(numTwo === 0) return 'ERROR';
+    let result = numOne / numTwo;
+    if(!Number.isInteger(result)) result = fixDecimals(result);
+    return result;
+}
+
+function fixDecimals(number) {
+    return number.toFixed(3);
 }
 
 
