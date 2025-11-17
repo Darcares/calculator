@@ -27,7 +27,20 @@ function divide(numOne, numTwo) {
 }
 
 function fixDecimals(number) {
-    return number.toFixed(3);
+    let result = number.toFixed(3);
+    result = removeZeros(result);
+    return result;
+}
+
+function removeZeros(number) {
+    let string = number.toString();
+
+    for(let i = 0; i < 2; i++) {
+        if(string[string.length - 1] === '0') string = string.slice(0, string.length - 1);
+    }
+
+    result = +string;
+    return result;
 }
 
 
