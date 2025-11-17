@@ -14,7 +14,8 @@ function multiply(numOne, numTwo) {
 }
 
 function divide(numOne, numTwo) {
-    return numOne / numTwo;
+    if(numTwo !== 0) return numOne / numTwo;
+    return 'ERROR';
 }
 
 
@@ -75,8 +76,15 @@ function initializeProgram() {
 
     function backspace() {
 
-        screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
-        if(screen.textContent < 1) screen.textContent = '0';
+        if(screen.textContent === 'ERROR') {
+            clearProgram('clear');
+        }        
+
+        else {
+            screen.textContent = screen.textContent.slice(0, screen.textContent.length - 1);
+            if(screen.textContent < 1) screen.textContent = '0';
+        }
+
     
     }
 
@@ -84,7 +92,11 @@ function initializeProgram() {
 
         const content = (typeof event === 'object') ? event.target.className : event;
 
-        if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null && (content === 'operator' || '/*-+'.includes(content))) {
+        if(screen.textContent === 'ERROR') {
+            clearProgram('clear');
+        }
+
+        else if(operation.numOne === null && operation.numTwo === null && operation.result === null && operation.operator === null && (content === 'operator' || '/*-+'.includes(content))) {
             operation.numOne = +screen.textContent;
             operation.operator = (content === 'operator') ? event.target.textContent : content;
             operation.cleanScreen = true;
@@ -200,7 +212,7 @@ function initializeProgram() {
             break;
 
             default:
-            screen.textContent = "Error";
+            screen.textContent = "ERROR";
             break;
             }  
         }
