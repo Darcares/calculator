@@ -195,7 +195,7 @@ function initializeProgram() {
                 /* Empty block, nothing should be done here*/
             }
 
-            else {
+            else if (screen.textContent.length < 12){
                 screen.textContent = screen.textContent += content;
             }
     }
