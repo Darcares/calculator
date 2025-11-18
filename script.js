@@ -183,7 +183,7 @@ function initializeProgram() {
             const content = (typeof event === "object") ? event.target.textContent : event;
 
             if(operation.cleanScreen) { 
-                screen.textContent = '';
+                screen.textContent = '0';
                 operation.cleanScreen = false; 
             }
 
