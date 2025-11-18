@@ -4,18 +4,21 @@ initializeProgram();
 function add(numOne, numTwo) {
     let result = numOne + numTwo;
     if(!Number.isInteger(result)) result = fixDecimals(result);
+    if(result.toString().length > 12) result = result.toPrecision(4); 
     return result;
 }
 
 function subtract(numOne, numTwo){
     let result = numOne - numTwo;
     if(!Number.isInteger(result)) result = fixDecimals(result);
+    if(result.toString().length > 12) result = result.toPrecision(4); 
     return result;
 }
 
 function multiply(numOne, numTwo) {
     let result = numOne * numTwo;
     if(!Number.isInteger(result)) result = fixDecimals(result);
+    if(result.toString().length > 12) result = result.toPrecision(4); 
     return result;
 }
 
@@ -23,6 +26,7 @@ function divide(numOne, numTwo) {
     if(numTwo === 0) return 'ERROR';
     let result = numOne / numTwo;
     if(!Number.isInteger(result)) result = fixDecimals(result);
+    if(result.toString().length > 12) result = result.toPrecision(4); 
     return result;
 }
 
@@ -136,7 +140,7 @@ function initializeProgram() {
 
         else if(operation.numOne !== null && operation.numTwo !== null && operation.result !== null && operation.operator !== null) {
             console.log('*************Chaining*************');
-            operation.numOne = operation.result;
+            operation.numOne = +operation.result;
             operation.numTwo = null;
             operation.result = null;
             operation.operator = (content === 'operator') ? event.target.textContent : content;
