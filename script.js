@@ -43,7 +43,7 @@ function removeZeros(number) {
         if(string[string.length - 1] === '0') string = string.slice(0, string.length - 1);
     }
 
-    result = +string;
+    const result = +string;
     return result;
 }
 
@@ -87,7 +87,7 @@ function initializeProgram() {
             operation.numTwo = null;
             operation.result = null;
             operation.operator = null;
-            cleanScreen = false;
+            operation.cleanScreen = false;
             screen.textContent = '0';
         }
 
@@ -96,7 +96,7 @@ function initializeProgram() {
             operation.numTwo = null;
             operation.result = null;
             operation.operator = null;
-            cleanScreen = false;
+            operation.cleanScreen = false;
             screen.textContent = '0';
             printScreen(event);
         }
