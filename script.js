@@ -105,7 +105,7 @@ function initializeProgram() {
 
     function backspace() {
 
-        if(screen.textContent === 'ERROR') {
+        if(screen.textContent === 'ERROR' || (operation.result !== null && operation.cleanScreen === true)) {
             clearProgram('clear');
         }        
 
